@@ -1,0 +1,442 @@
+[
+    {
+        "question": "How does the LD instruction load an input state?",
+        "answer": "Example code:\n```\nLD X0\n```\n\nExplanation: LD reads the ON/OFF status of X0 as the starting condition for subsequent logic."
+    },
+    {
+        "question": "Which elements can the LD instruction be used with?",
+        "answer": "Example code:\n```\nLD M100\n```\n\nExplanation: Besides X inputs, LD can load the status of boolean elements such as M, Y, S, etc."
+    },
+    {
+        "question": "How do LD and OUT work together to control an output?",
+        "answer": "Example code:\n```\nLD X1\nOUT Y0\n```\n\nExplanation: When X1 is ON, Y0 is driven ON; when X1 is OFF, Y0 is turned OFF."
+    },
+    {
+        "question": "What is the purpose of using LD in the first line of a program?",
+        "answer": "Example code:\n```\nLD X10\n```\n\nExplanation: It sets X10’s status as the initial condition for that network’s logic."
+    },
+    {
+        "question": "Can LD directly detect a specific scan state?",
+        "answer": "Example code:\n```\nLD X5\n```\n\nExplanation: LD only reads the current scan’s TRUE/FALSE state. For edge detection, use LDP or LDF."
+    },
+    {
+        "question": "What does the LDI instruction do?",
+        "answer": "Example code:\n```\nLDI X0\n```\n\nExplanation: LDI loads the inverse of X0. When X0=OFF, the condition is TRUE; when X0=ON, it is FALSE."
+    },
+    {
+        "question": "What is the difference between LDI and LD?",
+        "answer": "Example code:\n```\nLD X0\nLDI X1\n```\n\nExplanation: LD loads the direct status; LDI loads the inverted status."
+    },
+    {
+        "question": "How to use LDI to trigger only when an input is OFF?",
+        "answer": "Example code:\n```\nLDI X1\nOUT Y0\n```\n\nExplanation: Y0 turns ON only when X1=OFF, useful for safety door checks."
+    },
+    {
+        "question": "Can LDI be combined with AND, OR, etc.?",
+        "answer": "Example code:\n```\nLD X2\nANDI X3\nOUT Y1\n```\n\nExplanation: Yes. ANDI applies an inverted check on X3 only if the preceding condition is TRUE."
+    },
+    {
+        "question": "Can LDI invert special flag bits?",
+        "answer": "Example code:\n```\nLDI M8002\n```\n\nExplanation: Yes, any boolean element can be inverted with LDI."
+    },
+    {
+        "question": "What does the LDP instruction detect?",
+        "answer": "Example code:\n```\nLDP X0\n```\n\nExplanation: It detects the rising edge (OFF→ON) of X0 and generates a single-scan pulse."
+    },
+    {
+        "question": "How does LDP differ from LD?",
+        "answer": "Example code:\n```\nLD X1\nLDP X1\n```\n\nExplanation: LD continuously reads X1; LDP is TRUE only at the instant X1 transitions from OFF to ON."
+    },
+    {
+        "question": "How to use LDP for one-shot button triggering?",
+        "answer": "Example code:\n```\nLDP X2\nOUT M0\n```\n\nExplanation: M0 is set ON only during the scan when X2 goes from OFF to ON."
+    },
+    {
+        "question": "How to detect rising edges on two different inputs simultaneously?",
+        "answer": "Example code:\n```\nLDP X3\nOUT M10\nLDP X4\nOUT M11\n```\n\nExplanation: Use separate networks for each LDP to detect each input’s rising edge."
+    },
+    {
+        "question": "Can LDP be used with a timer for one-shot start?",
+        "answer": "Example code:\n```\nLDP X5\nOUT T0 K100\n```\n\nExplanation: Yes. T0 starts on the rising edge of X5, and X5 held ON won’t retrigger."
+    },
+    {
+        "question": "What does the LDF instruction detect?",
+        "answer": "Example code:\n```\nLDF X0\n```\n\nExplanation: It detects the falling edge (ON→OFF) of X0 and is TRUE for that single scan."
+    },
+    {
+        "question": "How does LDF differ from LDP?",
+        "answer": "Example code:\n```\nLDP X0\nLDF X0\n```\n\nExplanation: LDP detects rising edges; LDF detects falling edges, each generating a single-scan pulse."
+    },
+    {
+        "question": "How to act at the moment a button is released?",
+        "answer": "Example code:\n```\nLDF X1\nOUT M20\n```\n\nExplanation: M20 is set when X1 transitions from ON to OFF, detecting a button release."
+    },
+    {
+        "question": "Can LDF be used with a timer?",
+        "answer": "Example code:\n```\nLDF X2\nOUT T1 K30\n```\n\nExplanation: Yes. T1 starts on the falling edge of X2 and won’t retrigger if X2 stays OFF."
+    },
+    {
+        "question": "Can the same input use both LDP and LDF?",
+        "answer": "Example code:\n```\nLDP X3\nOUT M30\nLDF X3\nOUT M31\n```\n\nExplanation: Yes—one detects OFF→ON, the other ON→OFF, each triggering once."
+    },
+    {
+        "question": "How does the AND instruction perform logical AND?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\nOUT Y0\n```\n\nExplanation: Loads X0=ON, then ANDs with X1. Y0 turns ON only if both are ON."
+    },
+    {
+        "question": "What is the relationship between AND and LD?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\n```\n\nExplanation: LD loads the first condition; AND adds another condition to be ANDed."
+    },
+    {
+        "question": "Can multiple AND conditions be chained?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\nAND X2\nOUT Y0\n```\n\nExplanation: Yes—ALL conditions must be ON for the final result to be TRUE."
+    },
+    {
+        "question": "Can AND be used with different element types (X, M, S)?",
+        "answer": "Example code:\n```\nLD M10\nAND X5\nAND S20\nOUT Y10\n```\n\nExplanation: Yes—any boolean element type can be ANDed."
+    },
+    {
+        "question": "What if any AND condition is OFF?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\nOUT Y0\n```\n\nExplanation: If either X0 or X1 is OFF, the final result is FALSE and Y0 stays OFF."
+    },
+    {
+        "question": "What does the ANI instruction do?",
+        "answer": "Example code:\n```\nLD X0\nANI X1\nOUT Y0\n```\n\nExplanation: ANI performs AND with the inverse of X1. The condition remains TRUE only if X1=OFF."
+    },
+    {
+        "question": "What is the difference between ANI and LDI?",
+        "answer": "Example code:\n```\nLDI X1\nANI X1\n```\n\nExplanation: LDI inverts at load; ANI inverts only during the AND check."
+    },
+    {
+        "question": "How to check X0=ON and X1=OFF together?",
+        "answer": "Example code:\n```\nLD X0\nANI X1\nOUT Y0\n```\n\nExplanation: Y0 turns ON only if X0=ON AND X1=OFF."
+    },
+    {
+        "question": "Can multiple ANI instructions be chained?",
+        "answer": "Example code:\n```\nLD X0\nANI X1\nANI X2\nOUT Y5\n```\n\nExplanation: Yes—X0 must be ON, X1 and X2 both OFF for Y5 to turn ON."
+    },
+    {
+        "question": "How to mix ANI and normal AND?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\nANI X2\nOUT Y0\n```\n\nExplanation: Checks X0=ON AND X1=ON, then X2=OFF before Y0 turns ON."
+    },
+    {
+        "question": "What is the ANDP instruction used for?",
+        "answer": "Example code:\n```\nLD X0\nANDP X1\nOUT Y0\n```\n\nExplanation: When X0=ON, ANDP detects the rising edge of X1 (OFF→ON) once."
+    },
+    {
+        "question": "How does ANDP differ from LDP?",
+        "answer": "Example code:\n```\nLD X2\nLDP X3\nANDP X4\n```\n\nExplanation: LDP detects X3’s rising edge independently; ANDP requires the prior condition TRUE then detects X4’s rising edge."
+    },
+    {
+        "question": "Does ANDP keep detecting X1=ON?",
+        "answer": "Example code:\n```\nLD M10\nANDP X1\nOUT Y0\n```\n\nExplanation: It triggers only once at the moment X1 goes from OFF to ON."
+    },
+    {
+        "question": "Can multiple ANDP be chained?",
+        "answer": "Example code:\n```\nLD X0\nANDP X1\nANDP X2\nOUT Y5\n```\n\nExplanation: X0=ON, then rising edges of X1 and X2 each trigger once—possible but complex."
+    },
+    {
+        "question": "How to use ANDP with a counter?",
+        "answer": "Example code:\n```\nLD M20\nANDP X3\nOUT C0 K10\n```\n\nExplanation: When M20=ON, each rising edge of X3 increments counter C0 by 1."
+    },
+    {
+        "question": "What does the ANDF instruction detect?",
+        "answer": "Example code:\n```\nLD X0\nANDF X1\nOUT Y0\n```\n\nExplanation: When X0=ON, ANDF detects X1’s falling edge (ON→OFF) once."
+    },
+    {
+        "question": "How does ANDF differ from LDF?",
+        "answer": "Example code:\n```\nLD X2\nLDF X3\nANDF X4\n```\n\nExplanation: LDF independently detects X3’s falling edge; ANDF requires the prior condition TRUE then detects X4’s falling edge."
+    },
+    {
+        "question": "Can ANDF chain multiple inputs?",
+        "answer": "Example code:\n```\nLD X0\nANDF X1\nANDF X2\nOUT Y5\n```\n\nExplanation: X0=ON, then both X1 and X2 must each go ON→OFF to trigger Y5."
+    },
+    {
+        "question": "What is the difference between ANDF and ANDP?",
+        "answer": "Example code:\n```\nLD X0\nANDP X1\nANDF X2\n```\n\nExplanation: ANDP detects rising edges; ANDF detects falling edges, both requiring the prior condition TRUE."
+    },
+    {
+        "question": "Can ANDF be combined with pulse M8013?",
+        "answer": "Example code:\n```\nLD M8013\nANDF X10\nOUT M60\n```\n\nExplanation: Yes—but only when M8013=ON and X10 transitions ON→OFF in that scan will M60 trigger."
+    },
+    {
+        "question": "How does the OR instruction perform logical OR?",
+        "answer": "Example code:\n```\nLD X0\nOR X1\nOUT Y0\n```\n\nExplanation: Y0 turns ON if either X0 or X1 is ON."
+    },
+    {
+        "question": "Can OR be used repeatedly?",
+        "answer": "Example code:\n```\nLD X0\nOR X1\nOR X2\nOUT Y0\n```\n\nExplanation: Yes—Y0 turns ON if any of X0, X1, or X2 is ON."
+    },
+    {
+        "question": "How to mix OR and AND?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\nOR X2\nOUT Y0\n```\n\nExplanation: (X0 AND X1) OR X2; Y0 turns ON if X0&X1 are both ON or X2=ON."
+    },
+    {
+        "question": "What is the execution order of OR?",
+        "answer": "Example code:\n```\nLD X0\nOR X1\nAND X2\n```\n\nExplanation: First (X0 OR X1), then AND X2—executed line by line."
+    },
+    {
+        "question": "How does OR differ from OUT?",
+        "answer": "Example code:\n```\nLD X3\nOR X4\nOUT Y1\n```\n\nExplanation: OR is a logical instruction; OUT is the final output instruction that drives the element."
+    },
+    {
+        "question": "What does the ORI instruction do?",
+        "answer": "Example code:\n```\nLD X0\nORI X1\nOUT Y0\n```\n\nExplanation: ORI ORs the inverse of X1 (X1=OFF) with the preceding condition."
+    },
+    {
+        "question": "What is the difference between ORI and LDI?",
+        "answer": "Example code:\n```\nLDI X2\nORI X3\n```\n\nExplanation: LDI inverts at load; ORI inverts only for the OR comparison."
+    },
+    {
+        "question": "Can ORI handle multiple conditions?",
+        "answer": "Example code:\n```\nLD X0\nORI X1\nORI X2\nOUT Y10\n```\n\nExplanation: Y10 turns ON if X0=ON or X1=OFF or X2=OFF."
+    },
+    {
+        "question": "How to mix ORI with normal OR?",
+        "answer": "Example code:\n```\nLD X3\nORI X4\nOR X5\nOUT Y20\n```\n\nExplanation: Equivalent to (X3 OR (NOT X4)) OR X5."
+    },
+    {
+        "question": "When is ORI typically used?",
+        "answer": "Example code:\n```\nLD M0\nORI X6\nOUT Y1\n```\n\nExplanation: Used for safety conditions—Y1 ON if M0=ON or X6=OFF."
+    },
+    {
+        "question": "What does the ORP instruction detect?",
+        "answer": "Example code:\n```\nLD X0\nORP X1\nOUT Y0\n```\n\nExplanation: When X0=ON, ORP detects the rising edge of X1 (OFF→ON) in that scan."
+    },
+    {
+        "question": "How does ORP differ from LDP?",
+        "answer": "Example code:\n```\nLD X2\nLDP X3\nORP X4\n```\n\nExplanation: LDP detects X3’s rising edge independently; ORP requires the prior condition TRUE then detects X4’s rising edge."
+    },
+    {
+        "question": "Does ORP stay ON continuously?",
+        "answer": "Example code:\n```\nLD M10\nORP X1\nOUT Y5\n```\n\nExplanation: No—it’s TRUE only on the scan when X1 goes from OFF to ON."
+    },
+    {
+        "question": "Can ORP be used on two different inputs simultaneously?",
+        "answer": "Example code:\n```\nLD X0\nORP X1\nORP X2\nOUT Y6\n```\n\nExplanation: Yes—while X0=ON, rising edges of X1 or X2 each trigger once."
+    },
+    {
+        "question": "Can ORP start a one-shot timer?",
+        "answer": "Example code:\n```\nLD M20\nORP X3\nOUT T0 K50\n```\n\nExplanation: When M20=ON, a rising edge on X3 starts T0 for one pulse."
+    },
+    {
+        "question": "When is the ORF instruction used?",
+        "answer": "Example code:\n```\nLD M0\nORF X0\nOUT Y0\n```\n\nExplanation: While M0=ON, ORF detects X0’s falling edge (ON→OFF) once."
+    },
+    {
+        "question": "How does ORF differ from LDF?",
+        "answer": "Example code:\n```\nLDF X1\nORF X2\n```\n\nExplanation: LDF independently detects X1’s falling edge; ORF requires the prior condition TRUE then detects X2’s falling edge."
+    },
+    {
+        "question": "Can ORF be used for a button release action?",
+        "answer": "Example code:\n```\nLD X3\nORF X4\nOUT M10\n```\n\nExplanation: If X3=ON, when X4 goes ON→OFF, M10 triggers once."
+    },
+    {
+        "question": "Does ORF hold the output ON?",
+        "answer": "Example code:\n```\nLD M20\nORF X5\nOUT Y10\n```\n\nExplanation: No—it’s TRUE only on the scan when X5 falls."
+    },
+    {
+        "question": "Can multiple ORF be chained?",
+        "answer": "Example code:\n```\nLD X0\nORF X1\nORF X2\nOUT Y5\n```\n\nExplanation: Yes—each falling edge on X1 or X2 triggers Y5 if X0=ON."
+    },
+    {
+        "question": "When is the ORB instruction needed instead of a simple OR?",
+        "answer": "Example: When two series groups need to be ORed.\n\nExplanation: For (X0 & X2) OR (X1 & X3), use ORB after each series block."
+    },
+    {
+        "question": "How to use ORB for two series groups in parallel?",
+        "answer": "Example code:\n```\nLD X0\nAND X2\nLD X1\nAND X3\nORB\nOR X4\nOUT Y0\n```\n\nExplanation: Series (X0&X2) and (X1&X3) are ORed by ORB, then OR X4."
+    },
+    {
+        "question": "How to OR more than two series groups?",
+        "answer": "Example: Use ORB after each group.\n\nExplanation: You can chain ORB multiple times, but Mitsubishi often limits to 8."
+    },
+    {
+        "question": "Why can’t ORB be used indefinitely?",
+        "answer": "Example: 10 ORBs in a row.\n\nExplanation: Most Mitsubishi PLCs limit ORB to 8; beyond that causes errors."
+    },
+    {
+        "question": "Do you need ORB for a simple X0 OR X1?",
+        "answer": "Example code:\n```\nLD X0\nOR X1\nOUT Y0\n```\n\nExplanation: No—simple parallel contacts use OR. ORB is for parallel blocks."
+    },
+    {
+        "question": "What is the primary use of the ANB instruction?",
+        "answer": "Example: After parallel groups, then series.\n\nExplanation: ANB combines a completed parallel block with additional series conditions."
+    },
+    {
+        "question": "How to use ANB for a parallel group then series?",
+        "answer": "Example code:\n```\nLD X0\nOR X1\nAND X2\nLDI X3\nOR X4\nORI X5\nANB\nOUT Y0\n```\n\nExplanation: After OR/parallel block, ANB ANDs with remaining conditions."
+    },
+    {
+        "question": "How to chain multiple ANB groups?",
+        "answer": "Example: Use ANB repeatedly.\n\nExplanation: You can chain ANB for complex block ANDing, but there’s a limit."
+    },
+    {
+        "question": "How does ANB differ from AND?",
+        "answer": "Example code:\n```\nLD X0\nAND X1\nOUT Y0\n```\n\nExplanation: AND is for simple series; ANB is for ANDing a parallel block."
+    },
+    {
+        "question": "Do you need ANB for X0 OR X1 then AND X2?",
+        "answer": "Example code:\n```\nLD X0\nOR X1\nAND X2\nOUT Y0\n```\n\nExplanation: No—simple OR then AND doesn’t require ANB."
+    },
+    {
+        "question": "What is the purpose of the PLS instruction?",
+        "answer": "Example code:\n```\nPLS X0\nOUT M0\n```\n\nExplanation: Detects X0’s rising edge (OFF→ON) and generates a one-scan pulse for M0."
+    },
+    {
+        "question": "How does PLS differ from LDP?",
+        "answer": "Example code:\n```\nPLS X1\nLDP X1\n```\n\nExplanation: Both detect rising edges; syntax differs by PLC model support."
+    },
+    {
+        "question": "Can PLS be used for one-shot button triggers?",
+        "answer": "Example code:\n```\nPLS X2\nOUT T0 K100\n```\n\nExplanation: Yes—when X2 goes OFF→ON, T0 is triggered once."
+    },
+    {
+        "question": "Does PLS output continuously?",
+        "answer": "Example code:\n```\nPLS X3\nOUT Y0\n```\n\nExplanation: No—only ON during the scan of X3’s rising edge."
+    },
+    {
+        "question": "Can multiple PLS be used at once?",
+        "answer": "Example code:\n```\nPLS X4\nOUT M10\nPLS X5\nOUT M11\n```\n\nExplanation: Yes—each PLS detects its own input’s rising edge."
+    },
+    {
+        "question": "What edge does the PLF instruction detect?",
+        "answer": "Example code:\n```\nPLF X0\nOUT M0\n```\n\nExplanation: Detects X0’s falling edge (ON→OFF) and generates a one-scan pulse."
+    },
+    {
+        "question": "Is PLF similar to LDF?",
+        "answer": "Example code:\n```\nPLF X1\nLDF X2\n```\n\nExplanation: Both detect falling edges; syntax and naming vary."
+    },
+    {
+        "question": "When to use PLF for button release?",
+        "answer": "Example code:\n```\nPLF X3\nOUT T1 K30\n```\n\nExplanation: X3 ON→OFF triggers T1 for one scan."
+    },
+    {
+        "question": "Does PLF stay ON?",
+        "answer": "Example code:\n```\nPLF X4\nOUT M1\n```\n\nExplanation: No—only ON during the scan of X4’s falling edge."
+    },
+    {
+        "question": "Can PLF and PLS detect the same input?",
+        "answer": "Example code:\n```\nPLS X5\nOUT M10\nPLF X5\nOUT M11\n```\n\nExplanation: Yes—one for rising edge, one for falling edge."
+    },
+    {
+        "question": "How does the SET instruction latch a bit?",
+        "answer": "Example code:\n```\nLD X0\nSET M100\n```\n\nExplanation: When X0=ON, M100 is set and remains ON until reset."
+    },
+    {
+        "question": "What is the difference between SET and OUT?",
+        "answer": "Example code:\n```\nLD X1\nSET Y0\n```\n\nExplanation: OUT follows input state; SET latches ON until an RST clears it."
+    },
+    {
+        "question": "How to use SET for motor start hold?",
+        "answer": "Example code:\n```\nLD X2\nSET Y5\n```\n\nExplanation: Pressing X2 sets Y5 ON and holds it."
+    },
+    {
+        "question": "How to reset a SET bit?",
+        "answer": "Example code:\n```\nLD X3\nRST Y5\n```\n\nExplanation: When X3=ON, Y5 is reset OFF."
+    },
+    {
+        "question": "Can SET set multiple bits at once?",
+        "answer": "Example code:\n```\nLD X4\nSET M10 M11\n```\n\nExplanation: Some models allow multiple bits in one SET; often split into lines."
+    },
+    {
+        "question": "How does the RST instruction clear a bit?",
+        "answer": "Example code:\n```\nLD X0\nRST M100\n```\n\nExplanation: When X0=ON, M100 is forced OFF."
+    },
+    {
+        "question": "How to pair RST with SET?",
+        "answer": "Example code:\n```\nLD X1\nSET M50\nLD X2\nRST M50\n```\n\nExplanation: X1=ON sets M50; X2=ON resets M50."
+    },
+    {
+        "question": "Does RST follow input OFF?",
+        "answer": "Example code:\n```\nLD X3\nRST Y0\n```\n\nExplanation: No—when X3=ON, Y0 is cleared immediately."
+    },
+    {
+        "question": "Can RST clear multiple bits at once?",
+        "answer": "Example code:\n```\nLD X4\nRST M10 M11 M12\n```\n\nExplanation: If supported, resets multiple bits in one line."
+    },
+    {
+        "question": "How does RST differ from OUT?",
+        "answer": "Example code:\n```\nLD X5\nOUT Y1\nRST Y1\n```\n\nExplanation: OUT drives according to conditions; RST forcibly clears regardless."
+    },
+    {
+        "question": "What is the function of the MPS instruction?",
+        "answer": "Example code:\n```\nLD X0\nMPS\n```\n\nExplanation: Pushes the current logic result (X0 state) onto the stack for MRD/MPP use."
+    },
+    {
+        "question": "What is the relationship between MPS, MRD, and MPP?",
+        "answer": "Example code:\n```\nLD X1\nMPS\nMRD\nMPP\n```\n\nExplanation: MPS pushes, MRD reads top without popping, MPP reads and pops the top—stack mechanism."
+    },
+    {
+        "question": "Can MPS be used multiple times in a row?",
+        "answer": "Example code:\n```\nLD X2\nMPS\nLD X3\nMPS\n```\n\nExplanation: Yes—pushes multiple levels; MPP pops each in turn."
+    },
+    {
+        "question": "What if MRD/MPP are not used after MPS?",
+        "answer": "Example code:\n```\nLD X4\nMPS\nLD X5\nOUT Y0\n```\n\nExplanation: Logic still works, but leftover stack entries may consume resources."
+    },
+    {
+        "question": "When is MPS useful?",
+        "answer": "Example: Complex multi-stage logic.\n\nExplanation: Stores intermediate conditions for later retrieval, reducing redundant checks."
+    },
+    {
+        "question": "How does the MRD instruction work?",
+        "answer": "Example code:\n```\nLD X0\nMPS\nMRD\nOUT Y0\n```\n\nExplanation: MRD reads the top of stack and combines it with current logic without popping."
+    },
+    {
+        "question": "What is the difference between MRD and MPP?",
+        "answer": "Example code:\n```\nMRD\nMPP\n```\n\nExplanation: MRD reads without removing; MPP reads and pops the top."
+    },
+    {
+        "question": "Can you use MRD multiple times on the same top stack?",
+        "answer": "Example code:\n```\n// After MPS\nLD X1\nMPS\n// Consecutive MRD\nMRD\nOUT Y10\nMRD\nOUT Y11\n```\n\nExplanation: Yes—MRD can read the same top until MPP pops it."
+    },
+    {
+        "question": "Can MRD only read the top stack entry?",
+        "answer": "Explanation: Yes—only the top can be read; pop it first to access deeper levels."
+    },
+    {
+        "question": "How to combine MRD with AND/OR?",
+        "answer": "Example code:\n```\nLD M10\nMPS\nLD X5\nMRD\nAND X6\nOUT Y0\n```\n\nExplanation: Push M10, then MRD reads it and ANDs with X6."
+    },
+    {
+        "question": "What is the function of the MPP instruction?",
+        "answer": "Example code:\n```\nLD X0\nMPS\nMPP\n```\n\nExplanation: MPP reads and pops the top of the stack, removing it afterward."
+    },
+    {
+        "question": "How does MPP differ from MRD?",
+        "answer": "Example code:\n```\nLD X1\nMPS\nMRD\nMPP\n```\n\nExplanation: MRD reads without popping; MPP reads and pops."
+    },
+    {
+        "question": "When should MPP be used?",
+        "answer": "Example code:\n```\nLD X2\nMPS\nLD X3\nMPP\n```\n\nExplanation: After multiple pushes, use MPP to restore or free the stack."
+    },
+    {
+        "question": "Does MPP affect the next stack entry?",
+        "answer": "Example code:\n```\nLD X4\nMPS\nLD X5\nMPS\nMPP\n```\n\nExplanation: Popping the top makes the next entry the new top."
+    },
+    {
+        "question": "What if not all MPS have matching MPP?",
+        "answer": "Explanation: Leftover stack entries may exhaust stack space, though logic still runs."
+    },
+    {
+        "question": "What does the END instruction signify in a PLC program?",
+        "answer": "Example code:\n```\nEND\n```\n\nExplanation: Marks the end of the main program; PLC returns to the scan start."
+    },
+    {
+        "question": "What happens if END appears mid-program?",
+        "answer": "Example code:\n```\nLD X0\nOUT Y0\nEND\nLD X1\nOUT Y1\n```\n\nExplanation: Code after END is not executed; END should be at the very end."
+    },
+    {
+        "question": "What is the difference between FEND and END?",
+        "answer": "Example code:\n```\nFEND\nEND\n```\n\nExplanation: FEND separates main and sub/interrupt routines; END ends the entire program."
+    },
+    {
+        "question": "What if there is no END instruction?",
+        "answer": "Explanation: Compilation may fail or the system may auto-insert END; it’s best to explicitly include it."
+    },
+    {
+        "question": "Do subroutines or interrupts need END?",
+        "answer": "Example code:\n```\nSUBROUTINE\n...program...\nEND\n```\n\nExplanation: Yes—each subroutine or interrupt also needs END."
+    }
+]

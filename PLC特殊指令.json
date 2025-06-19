@@ -1,0 +1,382 @@
+[
+    {
+        "question": "What is the state of M8000 when the PLC enters RUN mode?",
+        "answer": "Example code:\n```\nLD M8000\nOUT Y0\n```\n\nExplanation: When the PLC is in RUN mode, M8000 remains ON, causing Y0 to be energized."
+    },
+    {
+        "question": "How to use M8000 to determine if the program is running?",
+        "answer": "Example code:\n```\nLD M8000\nAND X0\nOUT M10\n```\n\nExplanation: M10 is activated only when the PLC is in RUN (M8000=ON) and X0=ON."
+    },
+    {
+        "question": "Can M8000 be used as a global start condition?",
+        "answer": "Example code:\n```\nLD M8000\nOUT Y5\n```\n\nExplanation: Yes. In the main program, M8000 indicates the PLC is running, and Y5 can be used to signal the device is powered on."
+    },
+    {
+        "question": "How to combine M8000 with the emergency stop function?",
+        "answer": "Example code:\n```\nLD M8000\nAND X1  // X1 is the emergency stop button\nOUT Y10\n```\n\nExplanation: Y10 is activated only when the PLC is in RUN and the emergency stop button is not pressed."
+    },
+    {
+        "question": "What happens to M8000 when the PLC switches to STOP mode?",
+        "answer": "Example code:\n```\nLD M8000\nOUT Y0\n```\n\nExplanation: When the PLC leaves RUN mode, M8000 turns OFF, and Y0 turns OFF accordingly."
+    },
+    {
+        "question": "What is the state of M8001 under PLC RUN mode?",
+        "answer": "Example code:\n```\nLD M8001\nOUT Y0\n```\n\nExplanation: M8001 is the b-contact for RUN monitoring; when PLC is in RUN, M8001=OFF, so Y0 remains OFF."
+    },
+    {
+        "question": "What is the difference between M8000 and M8001?",
+        "answer": "Example code:\n```\nLD M8000\nOUT Y1\nLD M8001\nOUT Y2\n```\n\nExplanation: M8000 (a-contact) is ON in RUN; M8001 (b-contact) is OFF in RUN. They are complementary."
+    },
+    {
+        "question": "How to use M8001 to create a condition that never becomes true?",
+        "answer": "Example code:\n```\nLD M8001\nOUT M10\n```\n\nExplanation: In RUN mode M8001=OFF, so M10 is never driven. Useful to temporarily disable a program section."
+    },
+    {
+        "question": "Does M8001 change state in STOP mode?",
+        "answer": "Example code:\n```\nLD M8001\n```\n\nExplanation: Usually M8001 remains OFF in STOP mode; some models may differ, refer to the manual."
+    },
+    {
+        "question": "Can M8001 be used instead of a NOP instruction?",
+        "answer": "Example code:\n```\nLD M8001\nOUT Y5\n```\n\nExplanation: Yes. Using M8001 creates a network that never executes, similar to NOP."
+    },
+    {
+        "question": "When is M8002 briefly ON?",
+        "answer": "Example code:\n```\nLD M8002\nOUT M0\n```\n\nExplanation: M8002 is ON only during the first scan after PLC enters RUN, then automatically turns OFF."
+    },
+    {
+        "question": "How to use M8002 for initial data reset?",
+        "answer": "Example code:\n```\nLD M8002\nMOV K0 D0\nMOV K0 D1\n```\n\nExplanation: On the first RUN scan, D0 and D1 are reset to zero."
+    },
+    {
+        "question": "How to reset outputs at startup using M8002?",
+        "answer": "Example code:\n```\nLD M8002\nRST Y10 Y11\n```\n\nExplanation: On the first scan, Y10 and Y11 are reset to OFF for a safe startup state."
+    },
+    {
+        "question": "Can M8002 be used with a timer?",
+        "answer": "Example code:\n```\nLD M8002\nOUT T0 K100\n```\n\nExplanation: Triggers T0 timing when entering RUN, useful for startup delay sequences."
+    },
+    {
+        "question": "Does M8002 remain ON after multiple scans?",
+        "answer": "Example code:\n```\nLD M8002\nOUT Y0\n```\n\nExplanation: No. It’s only ON during the first RUN scan and OFF thereafter."
+    },
+    {
+        "question": "What is the relationship between M8003 and M8002?",
+        "answer": "Example code:\n```\nLD M8003\nOUT M10\n```\n\nExplanation: M8002 (a-contact) is ON on the first scan; M8003 (b-contact) is OFF on the first scan. They complement each other."
+    },
+    {
+        "question": "When M8002=ON, what is the state of M8003?",
+        "answer": "Example code:\n```\nLD M8002\nOUT M1\nLD M8003\nOUT M2\n```\n\nExplanation: On the initial scan M8002=ON and M8003=OFF, so M1=ON and M2=OFF."
+    },
+    {
+        "question": "How to use M8003 to block startup actions?",
+        "answer": "Example code:\n```\nLD M8003\nAND X0\nOUT Y10\n```\n\nExplanation: On the first scan M8003=OFF, preventing Y10 from driving. Later M8003=ON allows X0 to drive Y10."
+    },
+    {
+        "question": "Can M8002 and M8003 be used together?",
+        "answer": "Example code:\n```\nLD M8002\nOUT M20\nLD M8003\nOUT M21\n```\n\nExplanation: Yes. On the first scan M8002=ON, M8003=OFF; on the second scan M8002=OFF, M8003=ON."
+    },
+    {
+        "question": "What if M8003 is not used?",
+        "answer": "Example code:\n```\nLD M8003\n```\n\nExplanation: None. M8003 simply provides a b-contact for the initial scan; use as needed."
+    },
+    {
+        "question": "When does M8004 turn ON?",
+        "answer": "Example code:\n```\nLD M8004\nOUT Y0\n```\n\nExplanation: M8004 turns ON when the PLC detects an error, such as program or runtime faults."
+    },
+    {
+        "question": "How to trigger an alarm using M8004?",
+        "answer": "Example code:\n```\nLD M8004\nOUT Y10  // Warning lamp\nOUT BZ   // Buzzer (assumed flag)\n```\n\nExplanation: On error detection, the lamp and buzzer activate to alert maintenance."
+    },
+    {
+        "question": "When does M8004 automatically turn OFF?",
+        "answer": "Example code:\n```\nLD M8004\n```\n\nExplanation: M8004 resets to OFF only after the error is cleared and the PLC returns to normal."
+    },
+    {
+        "question": "Can M8004 be combined with emergency stop?",
+        "answer": "Example code:\n```\nLD M8004\nOR X1\nOUT M100\n```\n\nExplanation: M100 activates on error or emergency stop to shut down system power."
+    },
+    {
+        "question": "If noise causes false errors, will M8004 flicker?",
+        "answer": "Example code:\n```\nLD M8004\nOUT Y15\n```\n\nExplanation: If error is cleared quickly, M8004 may flicker; true errors keep it ON."
+    },
+    {
+        "question": "When does M8005 turn ON?",
+        "answer": "Example code:\n```\nLD M8005\nOUT Y0\n```\n\nExplanation: M8005 turns ON when the PLC detects battery voltage below the normal range."
+    },
+    {
+        "question": "What to do if battery voltage is low?",
+        "answer": "Example code:\n```\nLD M8005\nOUT M10\n```\n\nExplanation: Use M10 to drive a warning or log, reminding to replace the battery to avoid data loss."
+    },
+    {
+        "question": "What happens to M8005 after PLC power-off?",
+        "answer": "Example code:\n```\nLD M8005\n```\n\nExplanation: M8005 state follows hardware detection; if voltage remains low, it stays ON."
+    },
+    {
+        "question": "Can M8005 be reset by program?",
+        "answer": "Example code:\n```\nLD M8005\nRST M8005\n```\n\nExplanation: No. It’s hardware-controlled and cannot be reset by RST."
+    },
+    {
+        "question": "What is the risk of not addressing low battery?",
+        "answer": "Example code:\n```\nLD M8005\n```\n\nExplanation: Continued depletion may cause loss of register or clock data after power-off."
+    },
+    {
+        "question": "What is the difference between M8006 and M8005?",
+        "answer": "Example code:\n```\nLD M8006\nOUT Y0\n```\n\nExplanation: M8006 latches the low-voltage event, staying ON until manually or specifically cleared."
+    },
+    {
+        "question": "How to clear the latch of M8006?",
+        "answer": "Example code:\n```\nLD X0\nRST M8006\n```\n\nExplanation: Some models allow RST to clear; otherwise power cycle or battery replacement is required."
+    },
+    {
+        "question": "Will M8005 ON and M8006 ON occur simultaneously?",
+        "answer": "Example code:\n```\nLD M8005\nLD M8006\n```\n\nExplanation: Both can be ON on voltage drop; M8005 is real-time, M8006 is latched."
+    },
+    {
+        "question": "Why is latch function needed for M8006?",
+        "answer": "Example code:\n```\nLD M8006\nOUT M20\n```\n\nExplanation: Maintains warning even if voltage recovers, indicating a past event."
+    },
+    {
+        "question": "When does M8006 return OFF?",
+        "answer": "Example code:\n```\nLD M8006\nOUT Y5\n```\n\nExplanation: After hardware or program clears the latch, or power cycle then RST."
+    },
+    {
+        "question": "When does M8007 turn ON?",
+        "answer": "Example code:\n```\nLD M8007\nOUT Y0\n```\n\nExplanation: M8007 is ON when a power interruption is detected, indicating a voltage drop risk."
+    },
+    {
+        "question": "What countermeasures can be taken using M8007?",
+        "answer": "Example code:\n```\nLD M8007\nOUT M10\n```\n\nExplanation: On interruption, save critical data or stop operations to protect equipment."
+    },
+    {
+        "question": "How does M8007 differ from general power-off detection?",
+        "answer": "Example code:\n```\nLD M8007\n```\n\nExplanation: M8007 detects brief interruptions; longer outages use M8008."
+    },
+    {
+        "question": "Is M8007 latched ON?",
+        "answer": "Example code:\n```\nLD M8007\nOUT Y0\n```\n\nExplanation: Typically ON only during the interruption or briefly latched for one scan, depending on model."
+    },
+    {
+        "question": "Does M8007 turn OFF after power recovers?",
+        "answer": "Example code:\n```\nLD M8007\n```\n\nExplanation: Yes, it usually resets OFF once power is stable."
+    },
+    {
+        "question": "How does M8008 differ from M8007?",
+        "answer": "Example code:\n```\nLD M8008\nOUT M10\n```\n\nExplanation: M8008 detects longer power-off, while M8007 detects brief interruptions."
+    },
+    {
+        "question": "How to use M8008 for safe data storage?",
+        "answer": "Example code:\n```\nLD M8008\nMOV D0 D100\n```\n\nExplanation: When M8008=ON, immediately back up D0 to D100."
+    },
+    {
+        "question": "Does M8008 remain ON during sustained outage?",
+        "answer": "Example code:\n```\nLD M8008\n```\n\nExplanation: Yes, if PLC remains powered (e.g., via UPS), M8008 stays ON."
+    },
+    {
+        "question": "Does M8008 reset OFF after power restores?",
+        "answer": "Example code:\n```\nLD M8008\n```\n\nExplanation: Yes, it resets OFF once power is stable; remains ON if faults persist."
+    },
+    {
+        "question": "Can M8008 work without backup power?",
+        "answer": "Example code:\n```\nLD M8008\n```\n\nExplanation: No, requires UPS or internal protection to detect power-off and handle logic."
+    },
+    {
+        "question": "When does M8009 turn ON?",
+        "answer": "Example code:\n```\nLD M8009\nOUT Y0\n```\n\nExplanation: M8009 is ON when external 24V supply is cut off, indicating voltage insufficient."
+    },
+    {
+        "question": "How to monitor external power using M8009?",
+        "answer": "Example code:\n```\nLD M8009\nOUT M20\n```\n\nExplanation: If 24V is lost, M20=ON, triggering equipment shutdown or lockout."
+    },
+    {
+        "question": "How does M8009 differ from M8008?",
+        "answer": "Example code:\n```\nLD M8008\nLD M8009\n```\n\nExplanation: M8008 detects AC main power; M8009 detects DC 24V loss."
+    },
+    {
+        "question": "Can M8009 be used for emergency response in small systems?",
+        "answer": "Example code:\n```\nLD M8009\nOUT Y10\n```\n\nExplanation: Yes, 24V loss triggers Y10 for safety handling."
+    },
+    {
+        "question": "Does M8009 detect isolated supplies?",
+        "answer": "Example code:\n```\nLD M8009\n```\n\nExplanation: Ensure signal source syncs with 24V; isolated circuits may need additional detection."
+    },
+    {
+        "question": "What is special about M8011?",
+        "answer": "Example code:\n```\nLD M8011\nOUT Y0\n```\n\nExplanation: M8011 toggles ON/OFF at ~10ms intervals for high-frequency pulses."
+    },
+    {
+        "question": "How to generate fast blinking with M8011?",
+        "answer": "Example code:\n```\nLD M8011\nOUT Y10\n```\n\nExplanation: Y10 blinks at 10ms intervals, too fast to see, used for testing or high-speed counting."
+    },
+    {
+        "question": "Is M8011 suitable for precise timing?",
+        "answer": "Example code:\n```\nLD M8011\nOUT C0\n```\n\nExplanation: Counting may be affected by scan time; use hardware timers for high accuracy."
+    },
+    {
+        "question": "What is the difference between M8011 and M8012?",
+        "answer": "Example code:\n```\nLD M8011\nLD M8012\n```\n\nExplanation: M8011 ~10ms cycle, M8012 ~100ms cycle."
+    },
+    {
+        "question": "What if scan time exceeds 10ms?",
+        "answer": "Example code:\n```\nLD M8011\n```\n\nExplanation: The bit may toggle multiple times per scan, but only the current state is read, leading to instability."
+    },
+    {
+        "question": "What pulse cycle does M8012 produce?",
+        "answer": "Example code:\n```\nLD M8012\nOUT Y0\n```\n\nExplanation: Toggles ON/OFF every ~100ms, used for slower blinking or pulses."
+    },
+    {
+        "question": "Can M8012 drive a test lamp?",
+        "answer": "Example code:\n```\nLD M8012\nOUT Y5\n```\n\nExplanation: Y5 blinks at 0.1s intervals, visible to the eye."
+    },
+    {
+        "question": "Compare M8012 with M8004 and M8013?",
+        "answer": "Example code:\n```\nLD M8004\nLD M8012\nLD M8013\n```\n\nExplanation: M8004(1s) and M8013(1s) have longer cycles; M8012(100ms) is faster."
+    },
+    {
+        "question": "How to implement a 0.1s counter with M8012?",
+        "answer": "Example code:\n```\nLD M8012\nOUT C10\n```\n\nExplanation: C10 increments every 0.1s; 10 counts ≈1s. Accuracy depends on scan time."
+    },
+    {
+        "question": "How to stop M8012 blinking?",
+        "answer": "Example code:\n```\nLD M8012\nOUT M20\n```\n\nExplanation: M8012 is built-in and cannot be stopped by program; only PLC stop or power-off stops it."
+    },
+    {
+        "question": "What is the default cycle of M8013 in most models?",
+        "answer": "Example code:\n```\nLD M8013\nOUT Y0\n```\n\nExplanation: Typically a 1s ON / 1s OFF pulse for periodic blinking."
+    },
+    {
+        "question": "How to drive a warning lamp with M8013?",
+        "answer": "Example code:\n```\nLD M8013\nOUT Y10\n```\n\nExplanation: Y10 blinks at 1s intervals to alert personnel."
+    },
+    {
+        "question": "Can M8013 be used for precise timing?",
+        "answer": "Example code:\n```\nLD M8013\nOUT C0\n```\n\nExplanation: Approximate timing; use RTC or timer for higher precision."
+    },
+    {
+        "question": "Can M8012 and M8013 be used together?",
+        "answer": "Example code:\n```\nLD M8012\nOUT Y1\nLD M8013\nOUT Y2\n```\n\nExplanation: Yes. Y1 blinks at 0.1s, Y2 at 1s, no conflict."
+    },
+    {
+        "question": "Can you change M8013’s period via program?",
+        "answer": "Example code:\n```\nLD M8013\n```\n\nExplanation: No; period is fixed by internal clock and cannot be modified."
+    },
+    {
+        "question": "What is the oscillation period of M8014?",
+        "answer": "Example code:\n```\nLD M8014\nOUT Y0\n```\n\nExplanation: Approximately 1-minute ON/OFF cycle, used for long-period indication."
+    },
+    {
+        "question": "How to use M8014 for minute counting?",
+        "answer": "Example code:\n```\nLD M8014\nOUT C0\n```\n\nExplanation: Toggles every minute, used for long-duration accumulation."
+    },
+    {
+        "question": "Can M8014 replace the RTC?",
+        "answer": "Example code:\n```\nLD M8014\n```\n\nExplanation: Only minute-level toggling, no date/time details; cannot fully replace RTC."
+    },
+    {
+        "question": "Is M8014 suitable for higher frequency timing?",
+        "answer": "Example code:\n```\nLD M8014\n```\n\nExplanation: No; use M8012 or M8013 for faster requirements."
+    },
+    {
+        "question": "M8014 may not be implemented on some models?",
+        "answer": "Example code:\n```\nLD M8014\n```\n\nExplanation: Yes; check the model manual."
+    },
+    {
+        "question": "What function does M8015 have on some models?",
+        "answer": "Example code:\n```\nLD M8015\nOUT Y0\n```\n\nExplanation: Used to disable or preset timers, or as an internal mode flag, depending on the manual."
+    },
+    {
+        "question": "How to pause timers using M8015?",
+        "answer": "Example code:\n```\nLD M8015\nAND T0\nOUT Y10\n```\n\nExplanation: When M8015=ON, timers are paused; actual behavior depends on the model."
+    },
+    {
+        "question": "What is M8015’s relation to actual timers?",
+        "answer": "Example code:\n```\nLD M8015\n```\n\nExplanation: Can force timers to pause or reset; refer to model documentation."
+    },
+    {
+        "question": "If RST M8015 is used, will timers resume?",
+        "answer": "Example code:\n```\nLD X0\nRST M8015\n```\n\nExplanation: May not work if reserved by system; some models allow manual clear."
+    },
+    {
+        "question": "Can M8015 be used as a general bit?",
+        "answer": "Example code:\n```\nLD M8015\nOUT M10\n```\n\nExplanation: Not recommended; system-reserved function may cause interference."
+    },
+    {
+        "question": "When does M8016 turn ON?",
+        "answer": "Example code:\n```\nLD M8016\nOUT Y0\n```\n\nExplanation: ON while the PLC reads or displays the RTC, pausing updates."
+    },
+    {
+        "question": "How to use M8016 with screen time display?",
+        "answer": "Example code:\n```\nLD M8016\nAND M10\nOUT M20\n```\n\nExplanation: M10 may request display; M8016=ON indicates RTC read, pausing screen update."
+    },
+    {
+        "question": "Is M8016 latched?",
+        "answer": "Example code:\n```\nLD M8016\nOUT M30\n```\n\nExplanation: Usually a transient state ON during RTC read, then OFF."
+    },
+    {
+        "question": "How to detect when RTC read is complete?",
+        "answer": "Example code:\n```\nLDN M8016\nOUT Y5\n```\n\nExplanation: M8016=OFF indicates read complete, resume display or operation."
+    },
+    {
+        "question": "If RTC is unused, does M8016 affect?",
+        "answer": "Example code:\n```\nLD M8016\n```\n\nExplanation: No; if RTC is not used, M8016 remains OFF."
+    },
+    {
+        "question": "What is M8017 used for?",
+        "answer": "Example code:\n```\nLD M8017\nOUT Y0\n```\n\nExplanation: Adjusts internal RTC by ±30 seconds to correct time drift."
+    },
+    {
+        "question": "How to trigger M8017 for correction?",
+        "answer": "Example code:\n```\nLD X0\nSET M8017\n```\n\nExplanation: When X0=ON, M8017=ON, shifting time ±30s as per model."
+    },
+    {
+        "question": "Does M8017 turn OFF after correction?",
+        "answer": "Example code:\n```\nLD M8017\n```\n\nExplanation: Most models auto-reset M8017 to OFF after correction."
+    },
+    {
+        "question": "Can M8017 adjust by one minute instead of 30s?",
+        "answer": "Example code:\n```\nLD M8017\n```\n\nExplanation: No; use RTC write instructions for larger adjustments."
+    },
+    {
+        "question": "Can RTC read and M8017 correction occur simultaneously?",
+        "answer": "Example code:\n```\nLD M8016\nAND M8017\n```\n\nExplanation: Not recommended; pause display (M8016=ON) before correction (M8017)."
+    },
+    {
+        "question": "When does M8018 turn ON?",
+        "answer": "Example code:\n```\nLD M8018\nOUT Y0\n```\n\nExplanation: ON when the RTC module or card is detected as inserted."
+    },
+    {
+        "question": "If no RTC card is inserted, what is M8018?",
+        "answer": "Example code:\n```\nLD M8018\n```\n\nExplanation: M8018=OFF, indicating no RTC module or connection error."
+    },
+    {
+        "question": "How to protect RTC operations using M8018?",
+        "answer": "Example code:\n```\nLD M8018\nAND X0\nOUT M10\n```\n\nExplanation: Only when RTC module is present (M8018=ON) and X0=ON does RTC read/write occur."
+    },
+    {
+        "question": "Can M8018 signal card removal?",
+        "answer": "Example code:\n```\nLDN M8018\nOUT Y5\n```\n\nExplanation: M8018=OFF triggers Y5 warning for card absence."
+    },
+    {
+        "question": "Does M8018 update immediately on card change?",
+        "answer": "Example code:\n```\nLD M8018\n```\n\nExplanation: Yes; hardware detection updates M8018 on insertion/removal."
+    },
+    {
+        "question": "When does M8019 turn ON?",
+        "answer": "Example code:\n```\nLD M8019\nOUT Y0\n```\n\nExplanation: ON when the RTC experiences errors or read/write failures."
+    },
+    {
+        "question": "What is the relationship between M8019 and M8018?",
+        "answer": "Example code:\n```\nLD M8018\nLD M8019\n```\n\nExplanation: M8018 indicates module presence; M8019 indicates RTC errors. They operate independently."
+    },
+    {
+        "question": "What actions on RTC error?",
+        "answer": "Example code:\n```\nLD M8019\nOUT Y10  // Warning lamp\nMOV K0 D500  // Reset time registers\n```\n\nExplanation: Alert operator and attempt reinitialization."
+    },
+    {
+        "question": "Does M8019 reset OFF automatically?",
+        "answer": "Example code:\n```\nLD M8019\n```\n\nExplanation: Resets OFF after error is cleared and RTC reinitialized."
+    },
+    {
+        "question": "How to prevent frequent RTC errors?",
+        "answer": "Example code:\n```\nLD M8019\n```\n\nExplanation: Ensure stable battery voltage, proper module connection, and correct RTC handling."
+    }
+]
