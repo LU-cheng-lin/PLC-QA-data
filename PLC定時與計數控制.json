@@ -1,0 +1,42 @@
+[
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to control delayed light startup with a timer (On-Delay)?",
+        "answer": "Input: X0 = Start Button\nOutput: Y0 = Light\nTimer: T0 = 5 seconds (K50)\n\nInstruction List Code:\nLD     X0                  ; When the start button is pressed\nOUT    T0 K50              ; Start timer T0 for 5 seconds\nLD     T0                  ; When T0 times out\nOUT    Y0                  ; Turn on light\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to control delayed light off with a timer (Off-Delay)?",
+        "answer": "Input: X0 = Button\nOutput: Y0 = Light\nTimer: T0 = 3 seconds (K30)\nInternal Relay: M0 = Light Hold\n\nInstruction List Code:\nLD     X0                  ; Press the button\nOUT    M0                  ; Set M0\nLD     /X0                 ; Button released (X0 negated)\nOUT    T0 K30              ; Delay 3 seconds\nLD     T0                  ; After 3 seconds\nRST    M0                  ; Cancel hold\nLD     M0                  ; If M0 is still ON\nOUT    Y0                  ; Keep light ON\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to generate a blinking light using two alternating timers?",
+        "answer": "Input: None\nOutput: Y0 = Blinking Light\nTimers: T0, T1 (Alternating)\nInternal Relay: M0 = Blink Control\n\nInstruction List Code:\nLD     M8000               ; Always ON when PLC is powered\nOUT    T0 K50              ; Start T0, 5 seconds\nLD     T0                  ; When T0 ends\nOUT    T1 K50              ; Start T1, 5 seconds\nLD     T1                  ; When T1 ends\nRST    T0                  ; Reset T0\nLD     T0                  ; While T0 is active\nOUT    M0                  ; Set M0\nLD     M0                  ; If M0 is ON\nOUT    Y0                  ; Blink light ON\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to output a one-shot pulse after detecting a button, with timer delay?",
+        "answer": "Input: X0 = Button\nOutput: Y0 = One-shot Pulse\nTimer: T0 = 0.5 seconds (K5)\nInternal Relay: M0 = Pulse Hold\n\nInstruction List Code:\nLD     X0                  ; Press button\nOUT    M0                  ; Set M0\nLD     M0                  ; If M0 is ON\nOUT    T0 K5               ; Set T0 = 0.5 seconds\nLD     T0                  ; When T0 times out\nRST    M0                  ; Reset M0\nLD     M0                  ; While M0 is ON\nOUT    Y0                  ; Output one-shot\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to perform multi-stage sequence control (e.g., two stages) with timers?",
+        "answer": "Input: X0 = Start\nOutput: Y0 = Stage 1, Y1 = Stage 2\nTimers: T0 = 5 seconds (K50), T1 = 3 seconds (K30)\nInternal Relays: M0 = Stage 1, M1 = Stage 2\n\nInstruction List Code:\nLD     X0                  ; Press start\nSET    M0                  ; Enter stage 1\nLD     M0                  ; If in stage 1\nOUT    Y0                  ; Output Y0\nOUT    T0 K50              ; Set timer 5 seconds\nLD     T0                  ; When time up\nRST    M0                  ; End stage 1\nSET    M1                  ; Enter stage 2\nLD     M1                  ; If in stage 2\nOUT    Y1                  ; Output Y1\nOUT    T1 K30              ; Set timer 3 seconds\nLD     T1                  ; When time up\nRST    M1                  ; End stage 2\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to compare Timer value and output when a set time is reached?",
+        "answer": "Input: X0 = Start\nOutput: Y0 = Output Action\nTimer: T0 = 10 seconds (K100)\n\nInstruction List Code:\nLD     X0                  ; Start\nOUT    T0 K100             ; 10-second timer\nLD     T0                  ; When 10 seconds passed\nOUT    Y0                  ; Output action\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list to delay output after reaching a set count?",
+        "answer": "Input: X0 = Sensor (counts +1 per detection)\nOutput: Y0 = Delayed output after reaching count\nCounter: C0 = 5 (K5)\nTimer: T0 = 2 seconds (K20)\n\nInstruction List Code:\nLD     X0                  ; Each sensor detection +1\nOUT    C0 K5               ; Count to 5\nLD     C0                  ; When count = 5\nOUT    T0 K20              ; Delay 2 seconds\nLD     T0                  ; When timer ends\nOUT    Y0                  ; Execute action\nRST    C0                  ; Reset counter\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use the Down-Counter in Mitsubishi FX-series PLC IL instruction list to output a warning when count reaches 0?",
+        "answer": "Input: X0 = Feed-in (each time -1), X1 = Load preset\nOutput: Y0 = Warning or alert\nCounter: C1 = Down-Counter (K10)\n\nInstruction List Code:\nLD     X1                  ; When pressed\nMOV    K10 C1              ; Load 10 into C1\nLD     X0                  ; Each material detected\nCD     C1                  ; Down-Counter -1\nLD =   C1 K0               ; If C1 = 0\nOUT    Y0                  ; Output warning\nEND                        ; End of program"
+    },
+    {
+        "question": "How to use Mitsubishi FX-series PLC IL instruction list with an Up-Down Counter to handle increment/decrement simultaneously?",
+        "answer": "Input: X0 = Count Up, X1 = Count Down\nOutput: Y0 = Reached Upper Limit, Y1 = Reached Lower Limit\nCounter: C2 (Up-Down shared), Upper limit K10\n\nInstruction List Code:\nLD     X0                  ; Count up\nOUT    CU C2 K10           ; Up-Counter\nLD     X1                  ; Count down\nOUT    CD C2               ; Down-Counter\nLD =   C2 K10              ; If reached 10\nOUT    Y0                  ; Upper limit\nLD =   C2 K0               ; If reached 0\nOUT    Y1                  ; Lower limit\nEND                        ; End of program"
+    },
+    {
+        "question": "How to combine Timer and Counter in Mitsubishi FX-series PLC IL instruction list for mixed control (e.g., flash after counting)?",
+        "answer": "Input: X0 = Start Button, X1 = Product Sensor\nOutput: Y0 = Blinking Light\nCounter: C0 = 5\nTimers: T0, T1 (2 seconds alternating)\nInternal Relay: M0 = Blink State\n\nInstruction List Code:\nLD     X0                  ; Press start\nOUT    M0                  ; Set M0 = blinking state\nLD     X1                  ; Product detected\nOUT    C0 K5               ; Count to 5\nLD     C0                  ; When reached 5\nOUT    T0 K20              ; Timer 2 sec\nLD     T0                  ; When done\nOUT    T1 K20              ; Another 2 sec\nLD     T1                  ; When done\nRST    T0                  ; Restart T0\nLD     T0\nAND    M0                  ; While in blinking state\nOUT    Y0                  ; Light blinks\nEND                        ; End of program"
+    }
+]
